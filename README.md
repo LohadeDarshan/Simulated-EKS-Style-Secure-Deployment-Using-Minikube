@@ -1,2 +1,3 @@
-# Simulated-EKS-Style-Secure-Deployment-Using-Minikube
-Simulated EKS-Style Secure Deployment Using Minikube
+# EKS-Style Secure Deployment Using Minikube
+
+This is an example project for secure Kubernetes deployment using Minikube...
