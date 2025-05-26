@@ -1,1 +1,9 @@
-# Example content for eks-dashboard.json
+{
+  "title": "EKS Monitoring Dashboard",
+  "panels": [
+    { "title": "CPU Usage", "type": "graph" },
+    { "title": "Memory Usage", "type": "graph" },
+    { "title": "HTTP Request Rate", "type": "graph" },
+    { "title": "Pod Restarts", "type": "graph" }
+  ]
+}
