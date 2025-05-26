@@ -1,1 +1,13 @@
-# Example content for auth-to-data-only.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-auth-to-data
+spec:
+  podSelector:
+    matchLabels:
+      app: data-service
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: auth-service
