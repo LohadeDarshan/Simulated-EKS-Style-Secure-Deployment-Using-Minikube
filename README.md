@@ -4,16 +4,14 @@
 This project demonstrates a simulated secure microservices deployment using Minikube, mimicking real-world AWS EKS practices. It focuses on infrastructure, security, observability, and incident response.
 
 ---
-
 ## 📦 Setup Instructions
 
-### ✅ Prerequisites
+### ✅ Requirements
 
 - Minikube
 - Docker
 - kubectl
 - helm
-- (Optional) k9s, Kyverno, OPA, Falco
 
 ### ✅ Start Minikube
 
@@ -43,7 +41,7 @@ kubectl apply -f manifests/minio/
 kubectl apply -f manifests/network-policies/
 ```
 
-### ✅ Deploy OPA/Kyverno/Falco Policies
+### ✅ Deploy OPA Policies
 
 ```bash
 kubectl apply -f manifests/opa/
