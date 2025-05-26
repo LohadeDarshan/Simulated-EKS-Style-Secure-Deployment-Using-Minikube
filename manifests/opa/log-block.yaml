@@ -1,1 +1,9 @@
-# Example content for log-block.yaml
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPAllowPrivilegeEscalationContainer
+metadata:
+  name: block-authorization-header
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
