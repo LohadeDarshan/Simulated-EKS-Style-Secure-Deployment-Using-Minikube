@@ -1,1 +1,2 @@
-# Example content for values.yaml
+image: nginxdemos/hello
+containerPort: 80
