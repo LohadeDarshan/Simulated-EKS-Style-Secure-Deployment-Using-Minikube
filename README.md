@@ -1,3 +1,0 @@
-# EKS-Style Secure Deployment Using Minikube
-
-This is an example project for secure Kubernetes deployment using Minikube...
