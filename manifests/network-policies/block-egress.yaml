@@ -1,1 +1,9 @@
-# Example content for block-egress.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: block-all-egress
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress: []
