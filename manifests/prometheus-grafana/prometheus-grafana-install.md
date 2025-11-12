@@ -1,1 +1,0 @@
-# Example content for prometheus-grafana-install.md
