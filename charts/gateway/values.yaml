@@ -1,2 +1,0 @@
-image: nginxdemos/hello
-containerPort: 80
