@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pod-health-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+  - name: pod-health
+    interval: 30s
+    rules:
+    - alert: PodRestartingFrequently
+      expr: rate(kube_pod_container_status_restarts_total{namespace="app"}[15m]) > 0.1
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Pod {{ $labels.pod }} is restarting frequently"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted {{ $value }} times in the last 15 minutes."
+
+    - alert: PodNotReady
+      expr: kube_pod_status_ready{namespace="app", condition="false"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Pod {{ $labels.pod }} is not ready"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has been in not-ready state for more than 5 minutes."
+
+    - alert: PodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="app"}[30m]) > 0
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Pod {{ $labels.pod }} is crash looping"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping."
+
+    - alert: ProbeFailing
+      expr: kube_pod_container_status_ready{namespace="app"} == 0
+      for: 3m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Readiness probe failing for {{ $labels.pod }}"
+        description: "Container {{ $labels.container }} in pod {{ $labels.pod }} has a failing readiness probe."
+
+    - alert: LivenessProbeFailing
+      expr: kube_pod_container_status_restarts_total{namespace="app"} - kube_pod_container_status_restarts_total{namespace="app"} offset 5m > 0
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Liveness probe causing restarts for {{ $labels.pod }}"
+        description: "Container {{ $labels.container }} in pod {{ $labels.pod }} is being restarted due to liveness probe failures."

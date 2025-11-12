@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: network-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+  - name: network-policies
+    interval: 30s
+    rules:
+    - alert: UnexpectedNetworkTraffic
+      expr: |
+        sum(rate(container_network_transmit_bytes_total{namespace="app", pod=~"auth-service.*"}[5m])) by (pod) > 1000000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Unexpected high network traffic from {{ $labels.pod }}"
+        description: "Pod {{ $labels.pod }} is transmitting {{ $value | humanize }}B/s, which may indicate policy violation."
