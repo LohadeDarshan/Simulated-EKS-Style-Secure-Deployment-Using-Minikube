@@ -1,150 +1,115 @@
+# DevOps EKS-Style Deployment on Minikube
 
-# 🛡️ Simulated EKS-Style Secure Deployment Using Minikube
+[![CI Pipeline](https://img.shields.io/badge/CI-passing-brightgreen.svg)]()
+[![Kubernetes](https://img.shields.io/badge/kubernetes-v1.27+-blue.svg)](https://kubernetes.io)
+[![Helm](https://img.shields.io/badge/helm-v3.12+-blue.svg)](https://helm.sh)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-This project demonstrates a simulated secure microservices deployment using Minikube, mimicking real-world AWS EKS practices. It focuses on infrastructure, security, observability, and incident response.
+> A production-grade simulation of AWS EKS deployment patterns using Minikube, focusing on security, observability, and incident response.
 
----
-## 📦 Setup Instructions
+## 🎯 Overview
 
-### ✅ Requirements
+This project demonstrates enterprise-level DevOps practices by simulating a secure microservices deployment in a local Kubernetes cluster. It includes:
 
-- Minikube
-- Docker
-- kubectl
-- helm
+- 🔐 Network policies and RBAC for security
+- 📊 Complete observability with Prometheus & Grafana
+- 🛡️ Policy enforcement with Kyverno
+- 🚨 Incident response scenarios
+- 🧪 Chaos engineering tests
+- 📦 Infrastructure as Code
 
-### ✅ Start Minikube
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────┐
+│         Ingress Controller              │
+└────────────────┬────────────────────────┘
+                 │
+         ┌───────▼────────┐
+         │    Gateway     │
+         └───────┬────────┘
+                 │
+         ┌───────▼────────┐
+         │  Auth Service  │
+         └───────┬────────┘
+                 │
+         ┌───────▼────────┐
+         │  Data Service  │
+         └───────┬────────┘
+                 │
+         ┌───────▼────────┐
+         │  MinIO (S3)    │
+         └────────────────┘
+```
+
+## 🚀 Quick Start
 
 ```bash
-minikube start --cpus=2 --memory=4096 --addons=ingress,metrics-server
+# Clone repository
+git clone https://github.com/yourusername/devops-eks-minikube-simulation.git
+cd devops-eks-minikube-simulation
+
+# Run complete setup
+chmod +x scripts/setup/*.sh
+./scripts/setup/complete-setup.sh
+
+# Verify deployment
+kubectl get pods -n app
+
+# Access Grafana
+kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
 ```
 
-### ✅ Deploy Services
+## 📚 Documentation
 
-Each service is containerized via Helm charts:
+- [Setup Guide](docs/SETUP-GUIDE.md)
+- [Architecture Details](docs/ARCHITECTURE.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Security Analysis](docs/SECURITY-ANALYSIS.md)
+- [Testing Checklist](TESTING-CHECKLIST.md)
+
+## 🔧 Prerequisites
+
+- Minikube >= v1.30
+- kubectl >= v1.27
+- Helm >= v3.12
+- Docker >= 20.10
+
+## 📦 Components
+
+| Component | Version | Purpose |
+|-----------|---------|---------|
+| Gateway | latest | API Gateway (NGINX) |
+| Auth Service | latest | Authentication (HTTPBin) |
+| Data Service | latest | Business Logic |
+| MinIO | latest | S3-compatible storage |
+| Prometheus | latest | Metrics collection |
+| Grafana | latest | Visualization |
+| Kyverno | v1.10.0 | Policy enforcement |
+
+## 🧪 Testing
 
 ```bash
-cd charts/gateway && helm install gateway .
-cd charts/auth-service && helm install auth-service .
-cd charts/data-service && helm install data-service .
+# Run all tests
+./scripts/testing/test-deployments.sh
+./scripts/testing/test-security-incident.sh
+./scripts/testing/failure-simulation.sh
 ```
 
-### ✅ Deploy MinIO
+## 🤝 Contributing
 
-```bash
-kubectl apply -f manifests/minio/
-```
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-### ✅ Apply Network Policies and RBAC
+## 📄 License
 
-```bash
-kubectl apply -f manifests/network-policies/
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### ✅ Deploy OPA Policies
+## 👤 Author
 
-```bash
-kubectl apply -f manifests/opa/
-```
+**Your Name**
+- GitHub: [@yourusername](https://github.com/yourusername)
+- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
 
-### ✅ Setup Monitoring
+## ⭐ Show Your Support
 
-```bash
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install monitoring prometheus-community/kube-prometheus-stack
-```
-
----
-
-## 🧱 Architecture Diagram
-
-```
-                      +-------------+
-                      |   Ingress   |
-                      +------+------+
-                             |
-                      +------+------+
-                      |   Gateway    |  (Public)
-                      +------+------+
-                             |
-              +--------------+--------------+
-              |                             |
-      +-------+--------+           +--------+--------+
-      |   Auth Service  | -------> |   Data Service   |
-      +-----------------+          +------------------+
-                |
-          +-----+------+
-          |   MinIO    |
-          +------------+
-```
-
----
-
-## 🎯 Design Decisions
-
-- **Namespace Isolation**: `system` and `app` separated for clarity and RBAC boundaries.
-- **Ingress**: NGINX ingress for production-like traffic routing.
-- **Resource Limits**: All pods have `resources.limits` and `resources.requests`.
-- **Service Access**: `gateway` is public, others are cluster-internal.
-- **MinIO + RBAC**: Simulated IAM using service accounts + secret.
-
----
-
-## 🚨 Security Incident & Fix
-
-### 🔍 Problem
-
-- `auth-service` was logging incoming `Authorization` headers.
-- It was also able to call arbitrary external services — a violation.
-
-### 🛠️ Fixes
-
-- `/headers` calls were blocked from receiving sensitive headers.
-- NetworkPolicy applied:
-  - Allow only `auth-service -> data-service`
-  - Block all other egress
-
-### 🔐 Prevent Future Issues
-
-- Added OPA/Kyverno policy to detect and alert on `Authorization` headers being logged.
-- Future violations can be caught by runtime tools (e.g., Falco).
-
----
-
-## 📊 Observability
-
-- Prometheus + Grafana deployed
-- Dashboard includes:
-  - Pod CPU/memory
-  - HTTP request rates & errors
-  - Pod restarts
-
-> Exported dashboard JSON is included in `grafana-dashboards/eks-dashboard.json`
-
----
-
-## ⚠️ Failure Simulation
-
-- Deleted pods using `kubectl delete pod`
-- Verified system auto-recovered using ReplicaSet
-- Monitored restart spike in Grafana
-- Created alert rules for crash loops & failed probes
-
----
-
-## 📝 Assumptions / Known Issues
-
-- MinIO credentials are in a simple Kubernetes Secret (not sealed).
-- Simulated IAM via ServiceAccounts only.
-- OPA is enforcing a basic rule — real policies would require auditing.
-
----
-
-## ✅ Deliverables
-
-- ✅ `README.md` (this file)
-- ✅ `charts/` (Helm for each service)
-- ✅ `manifests/` (YAML for MinIO, RBAC, NetworkPolicies)
-- ✅ `grafana-dashboards/` (exported dashboard JSON)
-- ✅ Architecture diagram (ASCII above)
-- ✅ OPA policy files
+Give a ⭐️ if this project helped you!

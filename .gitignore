@@ -1,0 +1,43 @@
+# Kubernetes
+*.swp
+*.swo
+*~
+.kube/
+kubeconfig
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Secrets (IMPORTANT!)
+secrets/
+*.key
+*.pem
+credentials.yaml
+minio-secret.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Helm
+charts/
+*.tgz
+
+# Logs
+logs/
+*.log

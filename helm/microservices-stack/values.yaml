@@ -1,0 +1,67 @@
+# Default values for microservices-stack
+
+gateway:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: nginxdemos/hello
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+authService:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: kennethreitz/httpbin
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+dataService:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: hashicorp/http-echo
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+minio:
+  enabled: true
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+networkPolicies:
+  enabled: true
+
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+  grafana:
+    enabled: true
+    adminPassword: "admin123"

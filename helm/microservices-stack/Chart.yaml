@@ -1,0 +1,14 @@
+apiVersion: v2
+name: microservices-stack
+description: A Helm chart for EKS-style microservices deployment
+type: application
+version: 1.0.0
+appVersion: "1.0"
+maintainers:
+  - name: Your Name
+    email: your.email@example.com
+keywords:
+  - kubernetes
+  - microservices
+  - devops
+  - eks

@@ -1,0 +1,13 @@
+# Setup Guide
+
+## Prerequisites
+List of requirements...
+
+## Installation Steps
+Step-by-step installation...
+
+## Configuration
+Configuration options...
+
+## Verification
+How to verify installation...
