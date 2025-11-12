@@ -1,0 +1,26 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-network-policy
+  annotations:
+    policies.kyverno.io/title: Require Network Policy
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+  - name: check-network-policy
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+    validate:
+      message: "Namespace must have at least one NetworkPolicy"
+      deny:
+        conditions:
+          any:
+          - key: "{{request.object.metadata.name}}"
+            operator: Equals
+            value: "app"

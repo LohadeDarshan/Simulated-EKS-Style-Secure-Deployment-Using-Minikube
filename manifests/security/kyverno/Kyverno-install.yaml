@@ -1,0 +1,15 @@
+# Install Kyverno
+kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.10.0/install.yaml
+
+# Wait for Kyverno to be ready
+kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=kyverno -n kyverno --timeout=120s
+
+# Apply policies
+kubectl apply -f kyverno-policies.yaml
+
+# Apply network policies
+kubectl apply -f network-policies.yaml
+
+# Verify policies
+kubectl get clusterpolicy
+kubectl get networkpolicy -n app

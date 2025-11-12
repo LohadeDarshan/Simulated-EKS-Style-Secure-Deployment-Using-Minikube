@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: block-sensitive-logging
+  annotations:
+    policies.kyverno.io/title: Block Sensitive Header Logging
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/description: >-
+      Prevents containers from logging sensitive headers like Authorization tokens.
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+  - name: check-log-configuration
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    validate:
+      message: "Pods must not log Authorization headers or other sensitive data"
+      pattern:
+        spec:
+          containers:
+          - name: "*"
+            env:
+            - name: "LOG_HEADERS"
+              value: "!Authorization"

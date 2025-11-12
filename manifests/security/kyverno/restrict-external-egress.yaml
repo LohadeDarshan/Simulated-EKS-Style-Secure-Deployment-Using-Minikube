@@ -1,0 +1,28 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-external-egress
+  annotations:
+    policies.kyverno.io/title: Restrict External Egress
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: high
+spec:
+  validationFailureAction: audit
+  background: true
+  rules:
+  - name: validate-egress-rules
+    match:
+      any:
+      - resources:
+          kinds:
+          - NetworkPolicy
+          namespaces:
+          - app
+    validate:
+      message: "NetworkPolicy must not allow unrestricted egress"
+      pattern:
+        spec:
+          =(egress):
+          - to:
+            - =(podSelector): {}
+            - =(namespaceSelector): {}
