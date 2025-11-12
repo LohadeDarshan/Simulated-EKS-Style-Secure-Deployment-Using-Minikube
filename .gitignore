@@ -16,7 +16,6 @@ secrets/
 *.key
 *.pem
 credentials.yaml
-minio-secret.yaml
 
 # OS
 .DS_Store
