@@ -107,7 +107,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **Your Name**
-- GitHub: [@yLohadeDarshan](https://github.com/LohadeDarshan)
+- GitHub: [@LohadeDarshan](https://github.com/LohadeDarshan)
 - LinkedIn: [Darshan Loahde](https://www.linkedin.com/in/darshan-lohade-754263259)
 
 ## ⭐ Show Your Support
