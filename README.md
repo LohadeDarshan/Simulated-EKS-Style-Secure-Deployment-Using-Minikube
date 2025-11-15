@@ -107,8 +107,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/LohadeDarshan)
-- LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/darshan-lohade-754263259)
+- GitHub: [@yLohadeDarshan](https://github.com/LohadeDarshan)
+- LinkedIn: [Darshan Loahde](https://www.linkedin.com/in/darshan-lohade-754263259)
 
 ## ⭐ Show Your Support
 
